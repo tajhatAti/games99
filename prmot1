@@ -1,0 +1,158 @@
+"""
+Text extracted from PDF
+"""
+
+text = """
+MASTER PROMPT: Offline
+Village Shooter — Godot
+Engine, Maximum Visual Detail
+Copy everything below into your code agent (Arena
+agent) as one single task.
+This is the final, complete brief — engine, art
+detail level, map, gameplay,
+AI bots, and export, all in one place.
+Engine
+Godot Engine 4.x, using the Forward+ rendering
+method (Godot's
+highest-quality renderer — real-time global
+illumination via SDFGI,
+full PBR materials, high-quality shadows). Do not
+use the stripped-down
+Mobile rendering method — use full Forward+ for
+maximum visual quality.
+Goal
+
+An offline, single-player 3D game: a small, richly
+detailed Bangladeshi
+village with walkable paddy fields, built and
+exported to Android with
+Unreal Engine-level visual detail — every rice plant
+should read as an
+individual, detailed leaf cluster, not a flat texture
+or a simple blob.
+No multiplayer, no networking, no ads, no monetization.
+Visual detail target
+Every rice plant in the paddy fields is built
+from actual modeled leaf
+geometry (small multi-blade clusters, not a
+billboard or flat quad),
+placed via MultiMeshInstance3D  so thousands
+of them render efficiently
+in a single draw call while still looking
+individually detailed up close.
+Full PBR materials everywhere: normal maps,
+roughness maps, and albedo
+textures on rice, mud, dirt roads, house walls, tin
+roofs, tree bark and
+foliage — not flat single-color materials.
+Real-time lighting via Godot's SDFGI (Forward+
+renderer) for realistic
+
+bounced light and soft shadows, dynamic day-
+lighting on the sun.
+A wind-sway vertex shader animates every rice
+cluster individually so the
+whole field ripples realistically, blade by blade,
+not as one flat plane.
+Water (pond, paddy puddles) uses a proper
+reflective/refractive water
+shader, not a flat blue plane.
+Map — small village
+Compact playable area (~200m x 200m), dirt
+road through the center,
+5–8 detailed rural houses (mud walls, tin roofs,
+PBR materials, doors),
+a pond, coconut and mango-style trees, fences,
+haystacks and carts as
+cover objects.
+Paddy fields cover a large part of the map and
+are fully walkable —
+the player walks directly into the rice, no
+invisible walls around the
+fields.
+Ground material system: distinct wet-mud
+material/texture inside the
+paddy fields vs. dry dirt-road material
+elsewhere. Footstep sound and
+
+particle effects (dust vs. mud splash)
+automatically switch based on
+which surface the player is standing on (via
+ground zones or a physical
+material tag). Player movement speed can slow
+slightly in mud for realism.
+Rice rustling: a looping 3D sound on the player,
+active while inside the
+paddy field, volume tied to movement speed.
+Village ambience: looping 3D ambient sounds
+(birds, wind, distant
+cattle/rooster) placed around the map with
+realistic falloff.
+Player character & controls (mobile,
+touch)
+Third-person character with:
+Left-side virtual joystick for movement
+Right-side touch-drag for camera look/aim
+Sprint button (hold), jump button, crouch
+toggle
+Fire button, reload button, aim-down-sights
+toggle (tightens FOV)
+Movement: walk ~3 m/s, sprint ~6.5 m/s, realistic
+jump.
+
+Detailed character model/animations (walk, run,
+aim, fire, reload,
+death) — not a placeholder primitive body.
+Weapon & shooting
+One weapon equipped at start (pistol or rifle).
+Hitscan raycast shooting with muzzle flash, shell-
+eject particle, and
+surface-appropriate impact effects (dust on dirt,
+splash in mud, marks
+on wood/tin).
+Magazine-based ammo, reload animation, HUD
+ammo counter, recoil that
+recovers over time.
+Bot enemies (AI)
+4–8 bots using a state machine: Patrol →
+Alert/Chase →  Attack →
+Search →  back to Patrol, using vision-cone +
+line-of-sight detection.
+Bots have HP (e.g. 100), take raycast damage,
+play a death animation,
+stay dead (optional togglable respawn for
+practice mode).
+Expose accuracy, reaction time, HP, and patrol
+speed as exported
+
+variables in the Inspector so difficulty is
+tunable without touching code.
+Player health / game loop
+Player HP with HUD health bar, damage from bot
+hits.
+"You Died" screen with restart button (reloads
+level, resets bots).
+HUD counter of bots remaining; "cleared" state
+when all are down.
+HUD
+Health bar, ammo counter, bots-remaining counter,
+crosshair.
+Export target
+Android APK, fully offline after install (no internet
+permission needed).
+Include a short README in the project on how to
+open it in Godot, test in
+the editor, and export/sign the APK for direct
+install on an Android phone.
+Note for the human using this prompt
+
+Paste the whole thing above as your task to the
+agent. When it's done,
+download the project (or built APK, if the agent's
+environment can build
+one) from its download/export option, then either
+install the APK directly
+or open the project in Godot and export it yourself.
+"""
+
+print(text)
