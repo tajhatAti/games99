@@ -1,0 +1,249 @@
+"""
+Text extracted from PDF
+"""
+
+text = """
+PROJECT PROMPT: Offline
+Single-Player Village Shooter
+— PUBG PC Style (Unreal
+Engine 5)
+Copy everything below into your code agent (Arena
+agent / Cursor / large
+coding AI) as the task brief.
+Goal
+Build an offline, single-player 3D game for PC
+(Windows) in
+Unreal Engine 5, matching the visual style, lighting
+and realism of
+PUBG (PC edition) as closely as possible — NOT a
+mobile-optimized
+low-poly look, NOT a Free Fire / cartoon style.
+File size and asset detail
+are not constrained — prioritize visual quality and
+realism over file size.
+
+This is a solo offline experience with simple AI bot
+enemies to shoot at —
+no multiplayer, no networking, no server, no
+monetization.
+Platform target
+Target platform: Windows PC, packaged as a
+standalone executable
+(Unreal's "Package Project" for Windows).
+This project is NOT for the mobile phone — it
+targets a PC with a
+reasonably capable GPU. (A separate, lightweight
+mobile version can be
+built later with a different engine if needed —
+treat that as out of
+scope for this prompt.)
+Engine & rendering
+Engine: Unreal Engine 5 (latest stable version),
+free to use.
+Enable Lumen for dynamic global illumination and
+Nanite for
+virtualized, highly detailed geometry — this is
+what gives modern
+Unreal projects (and PUBG-caliber visuals) their
+
+realistic lighting and
+fine detail without hand-optimizing every mesh.
+Use Quixel Megascans, which is built into Unreal
+Engine via the
+Fab/Bridge plugin and is entirely free — pull
+photoscanned, PBR-quality
+ground, mud, rock, foliage, and rice/crop assets
+from there instead of
+building low-poly placeholder art. This is the
+key to reaching real
+PUBG-PC-level realism without paying for
+assets.
+Post-processing: realistic PUBG-style color
+grading — natural daylight,
+moderate contrast, subtle film grain/vignette, no
+cartoon toon-shading,
+no oversaturated colors.
+Art style direction
+Match PUBG PC's visual identity specifically:
+photorealistic
+ground textures, realistic foliage and lighting,
+muted/natural color
+palette, physically-based materials (wet mud,
+worn dirt roads, weathered
+wood/tin on houses).
+
+Explicitly avoid the Free Fire look (bright toon
+colors, exaggerated
+cartoon proportions, cel-shading).
+Map design — small village
+A compact village map (Unreal units: ~20,000 x
+20,000, roughly
+200m x 200m in real-world scale) — small and
+dense, not an open world,
+but rendered at full PUBG-PC fidelity.
+A dirt road running through the village, rural
+houses (mud walls, tin
+roofs) with PBR materials from Megascans, a
+small pond with realistic
+water shader, scattered fences, haystacks, carts
+as cover objects.
+Paddy fields covering a large part of the map
+— this is a core
+requirement, not decoration:
+Fields must be fully walkable — the player
+can walk directly into the
+rice, no invisible walls.
+Use Nanite-instanced rice/crop foliage
+(Megascans has crop/grass
+scatter assets) so the field is genuinely
+dense and detailed, not a
+flat painted texture.
+
+Add wind-driven vegetation sway (Unreal's
+built-in wind/foliage
+material nodes) so the whole field moves
+realistically in the breeze.
+Rice rustling sound: a looping 3D sound cue
+attached to the player,
+active while inside the paddy field, volume
+scaling with movement
+speed.
+Mud ground: a distinct wet-mud Megascans
+material inside the paddy
+field vs. a dry dirt-road material elsewhere;
+different footstep
+sounds per surface (use a Physical Material
+/ surface-type system so
+footstep SFX and particle splashes switch
+automatically based on what
+the player is standing on); optionally slow
+player movement speed
+slightly while in mud for realism.
+Small standing-water puddle patches at
+field edges with a realistic
+water/reflection material.
+General village ambience: birds, wind, distant
+cattle/rooster sounds as
+3D ambient sound sources placed around the map
+with realistic falloff.
+
+Player character & controls
+Third-person character (or optional first-person
+toggle) using Unreal's
+Character Blueprint / Enhanced Input system.
+Controls (PC): WASD to move, mouse to look/aim,
+Shift to sprint, Space
+to jump, Ctrl to crouch, left mouse to fire, R to
+reload, right mouse
+(hold) to aim down sights (tightens FOV, adds
+slight camera stabilization).
+Movement: walk ~3 m/s, sprint ~6.5 m/s realistic
+jump height, sprint
+stamina optional.
+Use a realistic PUBG-style third-person camera
+(shoulder offset) as the
+default, matching PUBG PC's camera feel.
+Weapon & shooting system
+Player starts with one basic weapon equipped
+(pistol or rifle) — keep
+scope to one weapon type, no complex loot system
+needed.
+Hitscan raycast shooting from camera/weapon
+socket, with realistic
+muzzle flash, shell-eject particle, and impact
+decals/particles that
+
+differ by surface (dirt kicks up dust, mud
+splashes, wood/tin leaves
+bullet marks).
+Magazine-based ammo with reload animation and
+a HUD ammo counter.
+Realistic recoil pattern that recovers over a
+short time.
+Bot enemies (AI)
+4–8 AI bots using Unreal's Behavior Tree /
+Blackboard system:
+Patrol: move between waypoints near spawn.
+Alert/Chase: on detecting the player (Pawn
+Sensing / AI Perception
+component, vision cone + line of sight), move
+toward cover / the
+player.
+Attack: fire at the player on a timer with
+realistic inaccuracy
+that tightens the closer/longer they have
+line of sight.
+Search: lose sight →  move to last known
+position, wait, return to
+patrol.
+Bots have HP (e.g. 100), take raycast
+damage, play a death animation
+(ragdoll physics is a nice-to-have if time
+
+allows), stay dead (no
+respawn) with an optional togglable "practice
+mode" respawn timer.
+Expose tuning variables (accuracy, reaction
+time, HP, patrol speed) as
+Blueprint editable variables so difficulty can
+be adjusted without
+touching code.
+Player health / game loop
+Player HP (e.g. 100), damage from bot hits, HUD
+health bar.
+"You Died" screen with restart button (reloads
+level, resets bots).
+Optional simple objective: HUD counter of bots
+remaining, "cleared" state
+when all are down.
+HUD
+Health bar, ammo counter, bots-remaining counter,
+crosshair, minimap
+(optional).
+Deliverable expectations from the
+code agent
+
+A working Unreal Engine 5 project (Blueprints
+and/or C++, whichever the
+agent is stronger at) implementing everything
+above, using Megascans
+assets pulled in via the Fab/Bridge plugin for
+the environment art.
+Clear comments / well-organized Blueprints,
+especially the bot AI
+Behavior Tree and the shooting logic, so the user
+(not an experienced
+programmer) can tune numbers from the Details
+panel without editing
+code/graphs.
+Packaged as a Windows executable (via Unreal's
+Package Project feature)
+that runs standalone, fully offline, with a short
+README on how to open
+the project in Unreal Engine and how to re-
+package it.
+Note for the human using this prompt
+Paste the whole section above as your first task
+message to the agent.
+Once it finishes, download the generated project (or
+packaged .exe, if the
+agent's environment can build it) from wherever the
+agent's interface
+
+offers a download/export option, then open it in
+Unreal Engine 5 on your
+PC (or just run the packaged .exe directly if it
+built one for you) — you
+do not need Unreal installed just to play a
+packaged .exe, only if you
+want to open/edit the project yourself.
+Remember: this build is for a PC, not your Oppo A5
+phone. If you also
+want something playable on the phone, that needs the
+separate lightweight
+mobile prompt (Godot Engine version) — say so and
+I'll hand that one back
+too.
+"""
+
+print(text)
