@@ -1,0 +1,106 @@
+[gd_scene load_steps=5 format=3 uid="uid://player123456"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_aaaa"]
+[ext_resource type="AudioStreamWAV" path="res://sounds/footstep_dirt.wav" id="2_dirt"]
+[ext_resource type="AudioStreamWAV" path="res://sounds/rustle.wav" id="3_rustle"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.38
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+radius = 0.36
+height = 1.35
+radial_segments = 12
+rings = 4
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_aaaa")
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_1")
+position = Vector3(0, 0.9, 0)
+debug_color = Color(0.2, 0.6, 1, 0.42)
+
+[node name="BodyMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_body")
+position = Vector3(0, 0.95, 0)
+cast_shadow = 1
+material_override = null
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+
+[node name="Camera3D_FPP" type="Camera3D" parent="Head"]
+current = true
+fov = 75.0
+near = 0.05
+far = 400.0
+
+[node name="RayCast3D" type="RayCast3D" parent="Head/Camera3D_FPP"]
+enabled = true
+target_position = Vector3(0, 0, -200)
+collision_mask = 3
+
+[node name="Muzzle" type="Node3D" parent="Head/Camera3D_FPP"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, -0.42, -0.58)
+
+[node name="MuzzleLight" type="OmniLight3D" parent="Head/Camera3D_FPP/Muzzle"]
+visible = false
+light_color = Color(1, 0.78, 0.35, 1)
+light_energy = 1.8
+omni_range = 6.0
+shadow_enabled = false
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+spring_length = 3.2
+collision_mask = 1
+margin = 0.18
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Camera3D_TPP" type="Camera3D" parent="Head/SpringArm3D"]
+current = false
+fov = 75.0
+near = 0.05
+far = 400.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="Head/SpringArm3D/Camera3D_TPP"]
+enabled = true
+target_position = Vector3(0, 0, -200)
+collision_mask = 3
+
+[node name="Muzzle_TPP" type="Node3D" parent="Head/SpringArm3D/Camera3D_TPP"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, -0.18, -0.52)
+
+[node name="MuzzleLight_TPP" type="OmniLight3D" parent="Head/SpringArm3D/Camera3D_TPP/Muzzle_TPP"]
+visible = false
+light_color = Color(1, 0.78, 0.35, 1)
+light_energy = 1.6
+omni_range = 5.0
+
+[node name="GroundCheck" type="RayCast3D" parent="."]
+enabled = true
+target_position = Vector3(0, -1.2, 0)
+collision_mask = 1
+
+[node name="FootstepPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_dirt")
+volume_db = -6.0
+bus = "Master"
+
+[node name="RustlePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_rustle")
+volume_db = -28.0
+bus = "Master"
+
+[node name="SFX_Shot" type="AudioStreamPlayer" parent="."]
+volume_db = -2.0
+bus = "Master"
+
+[node name="SFX_Reload" type="AudioStreamPlayer" parent="."]
+volume_db = -4.0
+bus = "Master"

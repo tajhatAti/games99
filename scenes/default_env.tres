@@ -1,0 +1,24 @@
+[gd_resource type="Environment" format=3 uid="uid://bdx0qenv12345"]
+
+[resource]
+background_mode = 1
+background_color = Color(0.62, 0.78, 0.92, 1)
+ambient_light_source = 1
+ambient_light_color = Color(0.96, 0.96, 0.92, 1)
+ambient_light_energy = 1.1
+ambient_light_sky_contribution = 0.25
+tonemap_mode = 2
+tonemap_exposure = 1.0
+tonemap_white = 1.0
+glow_enabled = false
+fog_enabled = true
+fog_light_color = Color(0.78, 0.84, 0.72, 1)
+fog_sun_amount = 0.35
+fog_density = 0.0012
+fog_sky_affect = 0.25
+sdfgi_enabled = true
+sdfgi_cascades = 4
+sdfgi_min_cell_size = 0.2
+sdfgi_max_to_cell_size = 12.0
+sdfgi_use_occlusion = true
+sdfgi_energy = 1.0

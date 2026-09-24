@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://paddy123456"]
+
+[ext_resource type="Script" path="res://scripts/paddy_field.gd" id="1_paddy"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_puddle"]
+size = Vector2(8, 5)
+subdivide_depth = 2
+subdivide_width = 2
+
+[node name="PaddyField" type="Node3D"]
+script = ExtResource("1_paddy")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="GroundArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = true
+monitoring = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundArea"]
+
+[node name="RiceMultiMesh" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 0
+giprobe_use = 0
+visibility_range_end = 120.0
+
+[node name="Puddle" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_puddle")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.025, 4.2)
+cast_shadow = 0
+
+[node name="Puddle2" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_puddle")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2, 0.02, -3.8)
+cast_shadow = 0

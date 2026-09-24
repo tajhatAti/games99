@@ -1,0 +1,110 @@
+[gd_scene load_steps=8 format=3 uid="uid://bot123456"]
+
+[ext_resource type="Script" path="res://scripts/bot.gd" id="1_bot"]
+[ext_resource type="AudioStreamWAV" path="res://sounds/shot.wav" id="2_shot"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bot"]
+radius = 0.38
+height = 1.75
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bot"]
+radius = 0.36
+height = 1.32
+radial_segments = 10
+rings = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bot"]
+albedo_color = Color(0.42, 0.36, 0.32, 1)
+roughness = 0.92
+metallic = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_muzzle"]
+size = Vector3(0.08, 0.08, 0.22)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hp"]
+viewport_path = NodePath("SubViewport_HP")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_house"]
+size = Vector3(6.2, 2.8, 7.2)
+
+[node name="Bot" type="CharacterBody3D" groups=["bots", "enemy"]]
+script = ExtResource("1_bot")
+collision_layer = 2
+collision_mask = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_bot")
+position = Vector3(0, 0.88, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_bot")
+material_override = SubResource("StandardMaterial3D_bot")
+position = Vector3(0, 0.95, 0)
+cast_shadow = 1
+
+[node name="StateLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
+billboard = 1
+no_depth_test = false
+fixed_size = true
+pixel_size = 0.012
+modulate = Color(1, 1, 1, 0.92)
+font_size = 24
+text = "PATROL"
+outline_size = 6
+outline_modulate = Color(0, 0, 0, 0.85)
+
+[node name="VisionRay" type="RayCast3D" parent="."]
+enabled = true
+target_position = Vector3(0, 0, -20)
+collision_mask = 3
+collide_with_areas = false
+
+[node name="ObstacleRay" type="RayCast3D" parent="."]
+enabled = true
+target_position = Vector3(0, 0, -2.2)
+collision_mask = 1
+
+[node name="Muzzle" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38, -0.58)
+
+[node name="MuzzleMesh" type="MeshInstance3D" parent="Muzzle"]
+mesh = SubResource("BoxMesh_muzzle")
+cast_shadow = 0
+
+[node name="MuzzleLight" type="OmniLight3D" parent="Muzzle"]
+visible = false
+light_color = Color(1, 0.72, 0.32, 1)
+light_energy = 1.8
+omni_range = 5.0
+
+[node name="SFX_Shot3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_shot")
+volume_db = -4.0
+max_distance = 42.0
+attenuation_model = 2
+unit_size = 8.0
+
+[node name="SubViewport_HP" type="SubViewport" parent="."]
+size = Vector2i(180, 22)
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="HPBar" type="ProgressBar" parent="SubViewport_HP"]
+offset_right = 180.0
+offset_bottom = 22.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+custom_minimum_size = Vector2(180, 10)
+
+[node name="ViewportSprite" type="Sprite3D" parent="."]
+texture = SubResource("ViewportTexture_hp")
+texture_filter = 2
+billboard = 1
+no_depth_test = false
+fixed_size = true
+pixel_size = 0.008
+position = Vector3(0, 2.35, 0)

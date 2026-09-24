@@ -1,0 +1,523 @@
+[gd_scene load_steps=25 format=3 uid="uid://main12345678"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://player123456" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://paddy123456" path="res://scenes/paddy_field.tscn" id="3_paddy"]
+[ext_resource type="PackedScene" uid="uid://hud123456" path="res://scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="Environment" path="res://scenes/default_env.tres" id="5_env"]
+[ext_resource type="AudioStreamWAV" path="res://sounds/ambient_birds.wav" id="6_amb"]
+[ext_resource type="PackedScene" uid="uid://mobile123456" path="res://scenes/ui/mobile_controls.tscn" id="7_mob"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="8_water]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(200, 200)
+subdivide_depth = 12
+subdivide_width = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.48, 0.42, 0.32, 1)
+roughness = 0.98
+uv1_scale = Vector3(8, 8, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(200, 0.6, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_road"]
+size = Vector3(200, 0.04, 7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_road"]
+albedo_color = Color(0.58, 0.48, 0.35, 1)
+roughness = 0.96
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(200, 10, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_house_wall"]
+size = Vector3(6.2, 2.8, 7.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_house"]
+size = Vector3(6.2, 2.8, 7.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cart"]
+size = Vector3(2.2, 1.5, 3.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_house_wall"]
+albedo_color = Color(0.76, 0.68, 0.58, 1)
+roughness = 0.92
+
+[sub_resource type="PrismMesh" id="PrismMesh_roof"]
+size = Vector3(7.6, 2.0, 7.0)
+subdivide_depth = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_roof"]
+albedo_color = Color(0.72, 0.28, 0.22, 1)
+roughness = 0.78
+metallic = 0.12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
+top_radius = 0.22
+bottom_radius = 0.32
+height = 5.2
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="SphereMesh_foliage"]
+radius = 1.8
+height = 3.2
+radial_segments = 10
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trunk"]
+albedo_color = Color(0.32, 0.22, 0.14, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_foliage"]
+albedo_color = Color(0.18, 0.52, 0.22, 1)
+roughness = 0.88
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+shader = ExtResource("8_water")
+
+
+
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("5_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 28.0, 0)
+light_color = Color(1, 0.96, 0.88, 1)
+light_energy = 1.45
+shadow_enabled = true
+directional_shadow_max_distance = 160.0
+directional_shadow_split_1 = 0.12
+directional_shadow_split_2 = 0.3
+directional_shadow_split_3 = 0.6
+shadow_bias = 0.04
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_ground")
+material_override = SubResource("StandardMaterial3D_ground")
+cast_shadow = 0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("BoxShape3D_ground")
+position = Vector3(0, -0.3, 0)
+debug_color = Color(0.5, 0.8, 0.3, 0.28)
+
+[node name="DirtRoad" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("BoxMesh_road")
+material_override = SubResource("StandardMaterial3D_road")
+cast_shadow = 0
+
+[node name="Village" type="Node3D" parent="."]
+
+# ---- Houses (5) along road ----
+[node name="House1" type="Node3D" parent="Village"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, -9.2)
+
+[node name="Walls" type="MeshInstance3D" parent="Village/House1"]
+mesh = SubResource("BoxMesh_house_wall")
+material_override = SubResource("StandardMaterial3D_house_wall")
+position = Vector3(0, 1.4, 0)
+cast_shadow = 1
+
+[node name="Roof" type="MeshInstance3D" parent="Village/House1"]
+mesh = SubResource("PrismMesh_roof")
+material_override = SubResource("StandardMaterial3D_roof")
+position = Vector3(0, 3.1, 0)
+cast_shadow = 1
+
+[node name="Collider" type="StaticBody3D" parent="Village/House1"]
+collision_layer = 1
+collision_mask = 2
+
+[node name="CShape" type="CollisionShape3D" parent="Village/House1/Collider"]
+shape = SubResource("BoxShape3D_house")
+debug_color = Color(0.9, 0.8, 0.5, 0.2)
+
+[node name="House2" type="Node3D" parent="Village"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.2, 0, 11.5)
+
+[node name="Walls" type="MeshInstance3D" parent="Village/House2"]
+mesh = SubResource("BoxMesh_house_wall")
+material_override = SubResource("StandardMaterial3D_house_wall")
+position = Vector3(0, 1.4, 0)
+
+[node name="Roof" type="MeshInstance3D" parent="Village/House2"]
+mesh = SubResource("PrismMesh_roof")
+material_override = SubResource("StandardMaterial3D_roof")
+position = Vector3(0, 3.1, 0)
+
+[node name="Collider" type="StaticBody3D" parent="Village/House2"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/House2/Collider"]
+shape = SubResource("BoxShape3D_house")
+
+[node name="House3" type="Node3D" parent="Village"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.0, 0, 18.4)
+
+[node name="Walls" type="MeshInstance3D" parent="Village/House3"]
+mesh = SubResource("BoxMesh_house_wall")
+material_override = SubResource("StandardMaterial3D_house_wall")
+position = Vector3(0, 1.4, 0)
+
+[node name="Roof" type="MeshInstance3D" parent="Village/House3"]
+mesh = SubResource("PrismMesh_roof")
+material_override = SubResource("StandardMaterial3D_roof")
+position = Vector3(0, 3.1, 0)
+
+[node name="Collider" type="StaticBody3D" parent="Village/House3"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/House3/Collider"]
+shape = SubResource("BoxShape3D_house")
+
+[node name="House4" type="Node3D" parent="Village"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.5, 0, -18.0)
+
+[node name="Walls" type="MeshInstance3D" parent="Village/House4"]
+mesh = SubResource("BoxMesh_house_wall")
+material_override = SubResource("StandardMaterial3D_house_wall")
+position = Vector3(0, 1.4, 0)
+
+[node name="Roof" type="MeshInstance3D" parent="Village/House4"]
+mesh = SubResource("PrismMesh_roof")
+material_override = SubResource("StandardMaterial3D_roof")
+position = Vector3(0, 3.1, 0)
+
+[node name="Collider" type="StaticBody3D" parent="Village/House4"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/House4/Collider"]
+shape = SubResource("BoxShape3D_house")
+
+[node name="House5" type="Node3D" parent="Village"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0, 0, -22.5)
+
+[node name="Walls" type="MeshInstance3D" parent="Village/House5"]
+mesh = SubResource("BoxMesh_house_wall")
+material_override = SubResource("StandardMaterial3D_house_wall")
+position = Vector3(0, 1.4, 0)
+
+[node name="Roof" type="MeshInstance3D" parent="Village/House5"]
+mesh = SubResource("PrismMesh_roof")
+material_override = SubResource("StandardMaterial3D_roof")
+position = Vector3(0, 3.1, 0)
+
+[node name="Collider" type="StaticBody3D" parent="Village/House5"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/House5/Collider"]
+shape = SubResource("BoxShape3D_house")
+
+[node name="House6" type="Node3D" parent="Village"]
+transform = Transform3D(0.990268, 0, -0.139173, 0, 1, 0, 0.139173, 0, 0.990268, -9.8, 0, -5.2)
+
+[node name="Walls" type="MeshInstance3D" parent="Village/House6"]
+mesh = SubResource("BoxMesh_house_wall")
+material_override = SubResource("StandardMaterial3D_house_wall")
+position = Vector3(0, 1.4, 0)
+
+[node name="Roof" type="MeshInstance3D" parent="Village/House6"]
+mesh = SubResource("PrismMesh_roof")
+material_override = SubResource("StandardMaterial3D_roof")
+position = Vector3(0, 3.1, 0)
+
+[node name="Collider" type="StaticBody3D" parent="Village/House6"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/House6/Collider"]
+shape = SubResource("BoxShape3D_house")
+
+# ---- Pond ----
+[node name="Pond" type="Node3D" parent="Village"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.0, 0, -6.0)
+
+[node name="Water" type="MeshInstance3D" parent="Village/Pond"]
+mesh = SubResource("PlaneMesh_ground")
+transform = Transform3D(0.1, 0, 0, 0, 1, 0, 0, 0, 0.1, 0, 0.03, 0)
+material_override = SubResource("ShaderMaterial_water")
+cast_shadow = 0
+
+[node name="PondCollider" type="Area3D" parent="Village/Pond"]
+collision_layer = 0
+collision_mask = 1
+
+# ---- Trees ----
+[node name="Trees" type="Node3D" parent="Village"]
+
+[node name="Tree1" type="Node3D" parent="Village/Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0, 0, 28.0)
+
+[node name="Trunk" type="MeshInstance3D" parent="Village/Trees/Tree1"]
+mesh = SubResource("CylinderMesh_trunk")
+material_override = SubResource("StandardMaterial3D_trunk")
+position = Vector3(0, 2.6, 0)
+
+[node name="Foliage" type="MeshInstance3D" parent="Village/Trees/Tree1"]
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_foliage")
+position = Vector3(0, 5.8, 0)
+
+[node name="Tree2" type="Node3D" parent="Village/Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 0, 22.0)
+
+[node name="Trunk" type="MeshInstance3D" parent="Village/Trees/Tree2"]
+mesh = SubResource("CylinderMesh_trunk")
+material_override = SubResource("StandardMaterial3D_trunk")
+position = Vector3(0, 2.6, 0)
+
+[node name="Foliage" type="MeshInstance3D" parent="Village/Trees/Tree2"]
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_foliage")
+position = Vector3(0, 5.8, 0)
+
+[node name="Tree3" type="Node3D" parent="Village/Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.0, 0, -18.0)
+
+[node name="Trunk" type="MeshInstance3D" parent="Village/Trees/Tree3"]
+mesh = SubResource("CylinderMesh_trunk")
+material_override = SubResource("StandardMaterial3D_trunk")
+position = Vector3(0, 2.6, 0)
+
+[node name="Foliage" type="MeshInstance3D" parent="Village/Trees/Tree3"]
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_foliage")
+position = Vector3(0, 5.8, 0)
+
+[node name="Tree4" type="Node3D" parent="Village/Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.0, 0, -28.5)
+
+[node name="Trunk" type="MeshInstance3D" parent="Village/Trees/Tree4"]
+mesh = SubResource("CylinderMesh_trunk")
+material_override = SubResource("StandardMaterial3D_trunk")
+position = Vector3(0, 2.6, 0)
+
+[node name="Foliage" type="MeshInstance3D" parent="Village/Trees/Tree4"]
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_foliage")
+position = Vector3(0, 5.8, 0)
+
+[node name="Tree5" type="Node3D" parent="Village/Trees"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.0, 0, 35.0)
+
+[node name="Trunk" type="MeshInstance3D" parent="Village/Trees/Tree5"]
+mesh = SubResource("CylinderMesh_trunk")
+material_override = SubResource("StandardMaterial3D_trunk")
+position = Vector3(0, 2.6, 0)
+
+[node name="Foliage" type="MeshInstance3D" parent="Village/Trees/Tree5"]
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_foliage")
+position = Vector3(0, 5.8, 0)
+
+# ---- Cover objects ----
+[node name="Cover" type="Node3D" parent="Village"]
+
+[node name="Haystack1" type="MeshInstance3D" parent="Village/Cover"]
+transform = Transform3D(1.2, 0, 0, 0, 0.9, 0, 0, 0, 1.2, 10.2, 0.9, 6.8)
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_road")
+cast_shadow = 1
+
+[node name="HayCollider1" type="StaticBody3D" parent="Village/Cover/Haystack1"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/Cover/Haystack1/HayCollider1"]
+shape = SubResource("BoxShape3D_cart")
+
+[node name="Haystack2" type="MeshInstance3D" parent="Village/Cover"]
+transform = Transform3D(1, 0, 0, 0, 0.85, 0, 0, 0, 1, -8.5, 0.85, -8.2)
+mesh = SubResource("SphereMesh_foliage")
+material_override = SubResource("StandardMaterial3D_road")
+
+[node name="Cart1" type="Node3D" parent="Village/Cover"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 9.2)
+
+[node name="CartBox" type="MeshInstance3D" parent="Village/Cover/Cart1"]
+mesh = SubResource("BoxMesh_house_wall")
+transform = Transform3D(0.35, 0, 0, 0, 0.22, 0, 0, 0, 0.5, 0, 0.65, 0)
+material_override = SubResource("StandardMaterial3D_trunk")
+
+[node name="CartCollider" type="StaticBody3D" parent="Village/Cover/Cart1"]
+collision_layer = 1
+
+[node name="CShape" type="CollisionShape3D" parent="Village/Cover/Cart1/CartCollider"]
+shape = SubResource("BoxShape3D_cart")
+
+# ---- Paddy Fields (3 instances) ----
+[node name="PaddyField1" parent="." instance=ExtResource("3_paddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.0, 0.01, 12.0)
+
+[node name="PaddyField2" parent="." instance=ExtResource("3_paddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.5, 0.01, -14.0)
+
+[node name="PaddyField3" parent="." instance=ExtResource("3_paddy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0, 0.01, -38.0)
+
+# ---- Invisible boundaries (4 walls) ----
+[node name="Boundaries" type="Node3D" parent="."]
+
+[node name="Wall_N" type="StaticBody3D" parent="Boundaries"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 100)
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boundaries/Wall_N"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall_S" type="StaticBody3D" parent="Boundaries"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -100)
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boundaries/Wall_S"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall_E" type="StaticBody3D" parent="Boundaries"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 100, 5, 0)
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boundaries/Wall_E"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall_W" type="StaticBody3D" parent="Boundaries"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -100, 5, 0)
+collision_layer = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Boundaries/Wall_W"]
+shape = SubResource("BoxShape3D_wall")
+
+# ---- Spawn points for bots ----
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="Marker3D" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, 15)
+
+[node name="Marker3D2" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 1, 18)
+
+[node name="Marker3D3" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1, -12)
+
+[node name="Marker3D4" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1, -10)
+
+[node name="Marker3D5" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, -28)
+
+[node name="Marker3D6" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1, -22)
+
+[node name="Marker3D7" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 1, 6)
+
+[node name="Marker3D8" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 1, 6)
+
+# ---- Ambient ----
+[node name="AmbientBirds" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 6, 10)
+stream = ExtResource("6_amb")
+autoplay = true
+volume_db = -14.0
+max_distance = 85.0
+attenuation_model = 2
+
+[node name="AmbientBirds2" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 5, -12)
+stream = ExtResource("6_amb")
+autoplay = true
+volume_db = -16.0
+
+# ---- Player ----
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 14.5)
+
+# ---- Mobile Controls (touch fallback) ----
+[node name="MobileControls" parent="." instance=ExtResource("7_mob")]
+
+# ---- HUD ----
+[node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="DeathScreen" type="ColorRect" parent="HUD"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="HUD/DeathScreen"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -90.0
+offset_right = 220.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/DeathScreen/Panel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/DeathScreen/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(1, 0.22, 0.22, 1)
+text = "YOU DIED"
+horizontal_alignment = 1
+
+[node name="Sub" type="Label" parent="HUD/DeathScreen/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Bots remaining: 3 / 6"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="HUD/DeathScreen/Panel/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "↻  RESTART  [R]"
+
+[node name="Hint" type="Label" parent="HUD/DeathScreen/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 0.72)
+text = "Click button or press R"
+horizontal_alignment = 1
+
+[node name="ClearedBanner" type="PanelContainer" parent="HUD"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -46.0
+offset_right = 200.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HUD/ClearedBanner"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.42, 1, 0.52, 1)
+text = "✓  VILLAGE CLEARED!"
+horizontal_alignment = 1
+vertical_alignment = 1

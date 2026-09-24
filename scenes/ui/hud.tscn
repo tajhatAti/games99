@@ -1,0 +1,237 @@
+[gd_scene load_steps=3 format=3 uid="uid://hud123456"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0, 0, 0, 0.52)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
+bg_color = Color(0.22, 0.78, 0.28, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="HUD" type="CanvasLayer" groups=["hud"]]
+script = ExtResource("1_hud")
+layer = 10
+
+[node name="TopBar" type="PanelContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 44.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+alignment = 0
+
+[node name="HealthBar" type="ProgressBar" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(220, 22)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "HP 100/100"
+vertical_alignment = 1
+
+[node name="BotsLabel" type="Label" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
+text = "BOTS 6 / 6"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="CamModeLabel" type="Label" parent="TopBar/HBox"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.92, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+text = "TPP  [V]"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Crosshair" type="Control" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HLine" type="ColorRect" parent="Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -1.0
+offset_right = -3.0
+offset_bottom = 1.0
+color = Color(1, 1, 1, 0.92)
+mouse_filter = 2
+
+[node name="HLine2" type="ColorRect" parent="Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -1.0
+offset_right = 10.0
+offset_bottom = 1.0
+color = Color(1, 1, 1, 0.92)
+
+[node name="VLine" type="ColorRect" parent="Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -10.0
+offset_right = 1.0
+offset_bottom = -3.0
+color = Color(1, 1, 1, 0.92)
+
+[node name="VLine2" type="ColorRect" parent="Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = 3.0
+offset_right = 1.0
+offset_bottom = 10.0
+color = Color(1, 1, 1, 0.92)
+
+[node name="CenterDot" type="ColorRect" parent="Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.5
+offset_top = -1.5
+offset_right = 1.5
+offset_bottom = 1.5
+color = Color(1, 0.22, 0.22, 0.95)
+
+[node name="HitMarker" type="Control" parent="Crosshair"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+
+[node name="TL" type="ColorRect" parent="Crosshair/HitMarker"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = -4.0
+offset_bottom = -4.0
+rotation = 0.785398
+color = Color(1, 1, 1, 1)
+
+[node name="TR" type="ColorRect" parent="Crosshair/HitMarker"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = -4.0
+rotation = 0.785398
+color = Color(1, 1, 1, 1)
+
+[node name="ReloadLabel" type="Label" parent="Crosshair"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = 22.0
+offset_right = 60.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 15
+text = "RELOADING..."
+horizontal_alignment = 1
+
+[node name="ADS_Vignette" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.18)
+
+[node name="BottomBar" type="PanelContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -48.0
+grow_vertical = 0
+
+[node name="AmmoLabel" type="Label" parent="BottomBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "30 / ∞"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ControlsHint" type="Label" parent="BottomBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.92, 0.92, 0.88, 0.72)
+text = "WASD move  •  Mouse aim  •  Shift sprint  •  V FPP/TPP  •  RMB ADS  •  R reload"
+horizontal_alignment = 1

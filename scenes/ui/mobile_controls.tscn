@@ -1,0 +1,162 @@
+[gd_scene load_steps=3 format=3 uid="uid://mobile123456"]
+
+[ext_resource type="Script" path="res://scripts/mobile_input.gd" id="1_mob"]
+[ext_resource type="Script" path="res://scripts/joy_stick.gd" id="2_joy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0.12, 0.12, 0.14, 0.55)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.82, 0.22)
+
+[node name="MobileControls" type="CanvasLayer" groups=["mobile_controls"]]
+script = ExtResource("1_mob")
+layer = 11
+visible = false
+
+[node name="MoveStick" type="Control" parent="."]
+anchors_preset = 3
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -178.0
+offset_right = 158.0
+offset_bottom = -22.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 0
+script = ExtResource("2_joy")
+
+[node name="BG" type="ColorRect" parent="MoveStick"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 136.0
+offset_bottom = 136.0
+color = Color(0.08, 0.08, 0.1, 0.18)
+mouse_filter = 2
+
+[node name="Knob" type="ColorRect" parent="MoveStick"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 44.0
+offset_top = 44.0
+offset_right = 92.0
+offset_bottom = 92.0
+color = Color(0.92, 0.92, 0.95, 0.38)
+mouse_filter = 2
+
+[node name="LookArea" type="Control" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = 56.0
+offset_right = -18.0
+offset_bottom = -180.0
+mouse_filter = 0
+tooltip_text = "drag to look"
+
+[node name="BtnFire" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -138.0
+offset_top = -126.0
+offset_right = -22.0
+offset_bottom = -46.0
+text = "FIRE"
+theme_override_font_sizes/font_size = 16
+
+[node name="BtnADS" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -248.0
+offset_top = -86.0
+offset_right = -152.0
+offset_bottom = -38.0
+text = "ADS"
+
+[node name="BtnReload" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -248.0
+offset_top = -148.0
+offset_right = -152.0
+offset_bottom = -100.0
+text = "R"
+
+[node name="BtnJump" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -138.0
+offset_top = -190.0
+offset_right = -62.0
+offset_bottom = -138.0
+text = "JUMP"
+
+[node name="BtnSprint" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 170.0
+offset_top = -98.0
+offset_right = 250.0
+offset_bottom = -48.0
+text = "SPRINT"
+
+[node name="BtnCrouch" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 170.0
+offset_top = -148.0
+offset_right = 250.0
+offset_bottom = -108.0
+text = "CROUCH"
+
+[node name="BtnCam" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -112.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 42.0
+text = "V  CAM"
+
+[connection signal="button_down" from="BtnFire" to="." method="_on_fire_pressed"]
+[connection signal="button_down" from="BtnReload" to="." method="_on_reload_pressed"]
+[connection signal="button_down" from="BtnJump" to="." method="_on_jump_pressed"]
+[connection signal="button_down" from="BtnSprint" to="." method="_on_sprint_down"]
+[connection signal="button_up" from="BtnSprint" to="." method="_on_sprint_up"]
+[connection signal="pressed" from="BtnCrouch" to="." method="_on_crouch_pressed"]
+[connection signal="button_down" from="BtnADS" to="." method="_on_ads_down"]
+[connection signal="button_up" from="BtnADS" to="." method="_on_ads_up"]
+[connection signal="pressed" from="BtnCam" to="." method="_on_toggle_cam"]
